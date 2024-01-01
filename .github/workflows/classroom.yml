@@ -1,0 +1,30 @@
+name: GitHub Classroom Workflow
+
+on:
+  - push
+  - workflow_dispatch
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  build:
+    name: Autograding
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create file for setting env vars
+        run: |
+          echo "#!/bin/sh" > setenv.sh
+          echo "export COURSE_ID=\"${{ secrets.COURSE_ID }}\"" >> setenv.sh
+          echo "export DATABASE_NAME=\"${{ secrets.DATABASE_NAME }}\"" >> setenv.sh
+          echo "export COLLECTION_NAME=\"${{ secrets.COLLECTION_NAME }}\"" >> setenv.sh
+          echo "export CLUSTER_NAME=\"${{ secrets.CLUSTER_NAME }}\"" >> setenv.sh
+          echo "export DATA_API_KEY=\"${{ secrets.DATA_API_KEY }}\"" >> setenv.sh
+          echo "export ENDPOINT_BASE_URL=\"${{ secrets.ENDPOINT_BASE_URL }}\"" >> setenv.sh
+          echo "export CONNECTION_STRING=\"${{ secrets.CONNECTION_STRING }}\"" >> setenv.sh
+          chmod +x setenv.sh
+      - uses: education/autograding@v1

@@ -1,0 +1,8 @@
+**/__pycache__/
+.pytest_cache/
+*.pyc
+.coverage
+*.egg-info/
+my_secrets.py
+find_scratch.py
+insert_scratch.py

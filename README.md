@@ -155,6 +155,8 @@ See `postCreateCommand` from [`devcontainer.json`](.devcontainer/devcontainer.js
 ## Run command
 `pytest`
 
+You can also use the "Testing" sidebar extension to easily run individual tests.
+
 ## Additional Resources
 - [IP Access List docs](https://www.mongodb.com/docs/atlas/security/ip-access-list/#add-ip-access-list-entries) ("Atlas UI" instructions)
 - [Create a Database guide](https://www.mongodb.com/basics/create-database).

@@ -10,18 +10,18 @@ from mongodb_credentials_test import (
     connection_string_key,
 )
 
-commands = [
-    {"R": 11, "G": 218, "B": 81},  # Malachite
-    {"R": 127, "G": 255, "B": 212},  # Aquamarine
-    {"R": 80, "G": 200, "B": 120},  # Emerald
-    {"R": 115, "G": 106, "B": 255},  # Tanzanite
-    {"R": 171, "G": 173, "B": 72},  # Peridot
-    {"R": 0, "G": 163, "B": 108},  # Jade
-    {"R": 21, "G": 176, "B": 26},  # Tsavorite
-    {"R": 38, "G": 97, "B": 156},  # Lapis Lazuli
-    {"R": 0, "G": 0, "B": 255},  # Topaz
-    {"R": 225, "G": 44, "B": 44},  # Rhodolite
-]  # Hard-coded to match insert.py
+payload_dicts = [
+    {"command": {"R": 11, "G": 218, "B": 81}, "experiment_id": "dacc788d"},  # Malachite
+    {"command": {"R": 127, "G": 255, "B": 212}, "experiment_id": "ca236d4e"},  # Aquamarine
+    {"command": {"R": 80, "G": 200, "B": 120}, "experiment_id": "bad820bb"},  # Emerald
+    {"command": {"R": 115, "G": 106, "B": 255}, "experiment_id": "c15bae67"},  # Tanzanite
+    {"command": {"R": 171, "G": 173, "B": 72}, "experiment_id": "673e6846"},  # Peridot
+    {"command": {"R": 0, "G": 163, "B": 108}, "experiment_id": "32d35040"},  # Jade
+    {"command": {"R": 21, "G": 176, "B": 26}, "experiment_id": "f998b465"},  # Tsavorite
+    {"command": {"R": 38, "G": 97, "B": 156}, "experiment_id": "e0ad387b"},  # Lapis Lazuli
+    {"command": {"R": 0, "G": 0, "B": 255}, "experiment_id": "69dca791"},  # Topaz
+    {"command": {"R": 225, "G": 44, "B": 44}, "experiment_id": "39d832df"},  # Rhodolite
+] # Hard-coded to match insert.py
 
 
 def flatten_dict(d, parent_key="", sep="_"):
@@ -53,8 +53,12 @@ def run_color_experiment(R, G, B):
 
 
 results_check = [
-    {"command": command, "sensor_data": run_color_experiment(**command)}
-    for command in commands
+    {
+        "command": payload["command"],
+        "sensor_data": run_color_experiment(**payload["command"]),
+        "experiment_id": payload["experiment_id"],
+    }
+    for payload in payload_dicts
 ]
 
 flat_results_check = [flatten_dict(doc) for doc in results_check]

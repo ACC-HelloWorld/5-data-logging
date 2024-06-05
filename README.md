@@ -118,31 +118,32 @@ When you are done implementing the script and have updated [`my_secrets.py`] on 
 
 Update [`find.py`](./find.py) based on [the tutorial example](https://ac-microcourses.readthedocs.io/en/latest/courses/hello-world/1.5.1-pymongo.html) to read all records from the database that have your course ID stored within the `course_id` field (see [PyMongo docs](https://pymongo.readthedocs.io/en/stable/tutorial.html)). Then, convert the results into a pandas DataFrame and save the output into a CSV file called `results.csv`.
 
-Since your documents are nested dictionaries, you will need to use the `pd.json_normalize` function to flatten the nested dictionaries into a pandas DataFrame. See the example below:
+Since your documents are nested dictionaries, you will need to use the `pd.json_normalize` function to flatten the nested dictionaries into a pandas DataFrame. For convenience, you can also set the `_id` column as the index of the pandas DataFrame via `.set_index("_id")`. See the example below:
 
 ```python
 import pandas as pd
 
 data = [
     {
-        "id": "id1",
+        "_id": "id1",
         "category1": {"item1": 1, "item2": 2, "item3": 3},
         "category2": {"itemA": 10, "itemB": 20, "itemC": 30},
     },
     {
-        "id": "id2",
+        "_id": "id2",
         "category1": {"item1": 4, "item2": 5, "item3": 6},
         "category2": {"itemA": 40, "itemB": 50, "itemC": 60},
     },
 ]
 
-df = pd.json_normalize(data)
+df = pd.json_normalize(data).set_index("_id")
 print(list(df.columns))
-# ['id', 'category1.item1', 'category1.item2', 'category1.item3', 'category2.itemA', 'category2.itemB', 'category2.itemC']
+# ['category1.item1', 'category1.item2', 'category1.item3', 'category2.itemA', 'category2.itemB', 'category2.itemC']
 print(df)
-#      id  category1.item1  category1.item2  category1.item3  category2.itemA  category2.itemB  category2.itemC
-# 0  id1               1               2               3              10              20              30
-# 1  id2               4               5               6              40              50              60
+#      category1.item1  category1.item2  category1.item3  category2.itemA  category2.itemB  category2.itemC
+# _id                                                                                                      
+# id1                1                2                3               10               20               30
+# id2                4                5                6               40               50               60
 ```
 
 NOTE: Committing and pushing `results.csv` is optional and will

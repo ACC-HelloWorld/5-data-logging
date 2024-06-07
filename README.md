@@ -47,7 +47,7 @@ Follow the `Creating a MongoDB Database with the Atlas UI` instructions within t
 
 ### Connection String
 
-You will also need to copy the [MongoDB connection string](https://www.mongodb.com/docs/guides/atlas/connection-string/) for your cluster. Refer to the video below. IMPORTANT: After copying the connection string, you will need to manually populate `<password>` with your database user password before adding this as a GitHub secret. For example, if the copy-pasted connection string is `mongodb+srv://test-user-find-only:<password>@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority` and your MongoDB password is `HGzZNsQ3vBLKrXXF`, then your `CONNECTION_STRING` would be `mongodb+srv://sgbaird:HGzZNsQ3vBLKrXXF@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority`.
+You will also need to copy the [MongoDB connection string](https://www.mongodb.com/docs/guides/atlas/connection-string/) for your cluster. Refer to the video below. IMPORTANT: After copying the connection string, you will need to manually populate `<password>` with your database user password before adding this as a GitHub secret. For example, if the copy-pasted connection string is `mongodb+srv://sgbaird:<password>@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority` and your MongoDB password is `HGzZNsQ3vBLKrXXF`, then your `CONNECTION_STRING` would be `mongodb+srv://sgbaird:HGzZNsQ3vBLKrXXF@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority`.
 
 ![Finding MongoDB Connection String's Cluster ID](./readme-images/mongodb-connect-uri.gif)
 

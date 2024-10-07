@@ -1,14 +1,9 @@
 import os
-from pprint import pformat
+import requests
+import json
 import math
-from pymongo.mongo_client import MongoClient
-
-from mongodb_credentials_test import (
-    course_id_key,
-    database_key,
-    collection_key,
-    connection_string_key,
-)
+from pprint import pformat
+from my_secrets import AWS_API_GATEWAY_URL, AWS_API_KEY
 
 payload_dicts = [
     {"command": {"R": 11, "G": 218, "B": 81}, "experiment_id": "dacc788d"},  # Malachite
@@ -63,26 +58,16 @@ results_check = [
 
 flat_results_check = [flatten_dict(doc) for doc in results_check]
 
-
 def test_documents_inserted():
-    # add the course_id to each document
-    for doc in results_check:
-        doc["course_id"] = os.environ[course_id_key]
-
-    # Create a new client and connect to the server
-    connection_string = os.environ[connection_string_key]
-    client = MongoClient(connection_string)
-
-    # upload a test document
-    db = client[os.environ[database_key]]
-    collection = db[os.environ[collection_key]]
-
-    # read the test document
-    docs = list(collection.find({}))
-
-    print(
-        f"Found {len(docs)} documents in the {os.environ[collection_key]} collection."
-    )
+    headers = {"x-api-key": AWS_API_KEY}
+    response = requests.get(AWS_API_GATEWAY_URL, headers=headers)
+    
+    if response.status_code != 200:
+        assert False, f"Failed to fetch data: {response.status_code}, {response.text}"
+    
+    docs = json.loads(response.text)
+    
+    print(f"Found {len(docs)} documents from the API.")
 
     flat_docs = [flatten_dict(doc) for doc in docs]
 
@@ -106,8 +91,8 @@ def test_documents_inserted():
                 "of the dataset (no need to delete existing entries for this assignment)."
             )
 
-    # close the connection
-    client.close()
+if __name__ == "__main__":
+    test_documents_inserted()
 
 
 if __name__ == "__main__":

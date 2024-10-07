@@ -1,12 +1,39 @@
+"""
+The main changes include:
+- Imported the json and requests modules to communicate with the AWS API Gateway.
+- Imported AWS_API_GATEWAY_URL and AWS_API_KEY from my_secrets.py.
+- Added get_data_from_aws_lambda() function to get data from AWS Lambda.
+- The get_data_from_aws_lambda() function replaces the way results_check
+was imported directly from insert_test.py.
+- These changes allow find_test.py to fetch data from MongoDB through the AWS API Gateway
+and Lambda functions, rather than directly from a local file.
+
+Note:
+- Ensure that the my_secrets.py file contains the correct AWS_API_GATEWAY_URL and AWS_API_KEY.
+- The AWS Lambda function should be configured to return data in the same format
+as the original MongoDB query.
+"""
+
+
 import os
 import pandas as pd
 from pathlib import Path
-from insert_test import results_check
+import json
+import requests
+from my_secrets import AWS_API_GATEWAY_URL, AWS_API_KEY
 
 n_decimals = 4
 
-check_df = pd.json_normalize(results_check).round(n_decimals)
+def get_data_from_aws_lambda():
+    headers = {"x-api-key": AWS_API_KEY}
+    response = requests.get(AWS_API_GATEWAY_URL, headers=headers)
+    if response.status_code == 200:
+        return json.loads(response.text)
+    else:
+        raise Exception(f"Failed to fetch data: {response.status_code}, {response.text}")
 
+results_check = get_data_from_aws_lambda()
+check_df = pd.json_normalize(results_check).round(n_decimals)
 
 def test_find():
     # Test that a pandas object and CSV file are present
@@ -71,7 +98,6 @@ def test_find():
         f"DataFrame from 'results.csv':\n{csv_df_selected.to_string()}\n"
         f"Matches:\n{csv_df_matches}"
     )
-
 
 if __name__ == "__main__":
     test_find()

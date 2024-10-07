@@ -1,9 +1,9 @@
 {
     "tests": [
         {
-            "name": "MongoDB Credentials (env vars)",
+            "name": "AWS API Gateway Credentials (env vars)",
             "setup": "sudo -H pip3 install -r requirements.txt",
-            "run": ". ./setenv.sh && pytest mongodb_credentials_test.py::test_env_vars_exists",
+            "run": ". ./setenv.sh && pytest aws_credentials_test.py::test_env_vars_exists",
             "input": "",
             "output": "",
             "comparison": "exact",
@@ -11,27 +11,17 @@
             "points": 0
         },
         {
-            "name": "MongoDB Credentials (PyMongo connection)",
+            "name": "AWS API Gateway Connection Test",
             "setup": "sudo -H pip3 install -r requirements.txt",
-            "run": ". ./setenv.sh && pytest mongodb_credentials_test.py::test_connection",
+            "run": ". ./setenv.sh && pytest mongodb_credentials_test.py::test_aws_api",
             "input": "",
             "output": "",
             "comparison": "exact",
             "timeout": 5,
-            "points": 2
+            "points": 4
         },
         {
-            "name": "MongoDB Credentials (Data API)",
-            "setup": "sudo -H pip3 install -r requirements.txt",
-            "run": ". ./setenv.sh && pytest mongodb_credentials_test.py::test_data_api",
-            "input": "",
-            "output": "",
-            "comparison": "exact",
-            "timeout": 5,
-            "points": 2
-        },
-        {
-            "name": "Upload data using Data API on microcontroller",
+            "name": "Upload data using AWS API Gateway on microcontroller",
             "setup": "sudo -H pip3 install -r requirements.txt",
             "run": ". ./setenv.sh && pytest insert_test.py",
             "input": "",
@@ -41,7 +31,7 @@
             "points": 3
         },
         {
-            "name": "Extract and save data via PyMongo",
+            "name": "Extract and save data via AWS API Gateway",
             "setup": "sudo -H pip3 install -r requirements.txt",
             "run": ". ./setenv.sh && pytest find_test.py",
             "input": "",

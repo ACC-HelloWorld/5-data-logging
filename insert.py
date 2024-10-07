@@ -1,15 +1,14 @@
 # This file needs to be run on your microcontroller
 from netman import connectWiFi
+import urequests
+import ujson
 
 from my_secrets import (
     SSID,
     PASSWORD,
     COURSE_ID,
-    DATA_API_KEY,
-    ENDPOINT_BASE_URL,
-    CLUSTER_NAME,
-    DATABASE_NAME,
-    COLLECTION_NAME,
+    AWS_API_GATEWAY_URL,
+    AWS_API_KEY,
 )
 
 # TODO: other imports here
@@ -75,10 +74,39 @@ payload_dicts = [
 # TODO: for each of the commands above, run the corresponding dummy color
 # experiment and upload a document containing your course ID (use `course_id` as
 # the key), the original command, the experiment ID, and the sensor data to your
-# MongoDB collection. The dictionary should be of the form:
+# MongoDB collection via the AWS API Gateway. The dictionary should be of the form:
 # {
 #     "command": {"R": ..., "G": ..., "B": ...},
 #     "sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
 #     "experiment_id": "...",
+#     "course_id": "..."
 # }
+# Hint: Use urequests to send a POST request to the AWS API Gateway URL
+# Don't forget to include the API key in the headers
 ...  # IMPLEMENT
+
+
+
+# Example structure (you need to fill in the details):
+'''
+
+headers = {"x-api-key": AWS_API_KEY, "Content-Type": "application/json"}
+
+for payload in payload_dicts:
+    command = payload["command"]
+    sensor_data = run_color_experiment(command["R"], command["G"], command["B"])
+    document = {
+        "command": command,
+        "sensor_data": sensor_data,
+        "experiment_id": payload["experiment_id"],
+        "course_id": COURSE_ID
+    }
+    
+    response = urequests.post(AWS_API_GATEWAY_URL, headers=headers, json=document)
+    
+    if response.status_code == 200:
+        print(f"Document uploaded successfully: {payload['experiment_id']}")
+    else:
+        print(f"Error uploading document: {response.status_code}, {response.text}")
+
+'''

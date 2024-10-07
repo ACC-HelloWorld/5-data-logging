@@ -1,8 +1,7 @@
 import os
-import requests
-import json
 import pandas as pd
-from my_secrets import AWS_API_GATEWAY_URL, AWS_API_KEY
+from pymongo import MongoClient
+from my_secrets import MONGODB_URI
 
 # TODO: Other imports here (if needed)
 ...
@@ -29,17 +28,18 @@ course_id = os.environ["COURSE_ID"]
 
 # Example structure (you need to fill in the details):
 '''
-headers = {"x-api-key": AWS_API_KEY}
-params = {"course_id": course_id}  
+client = MongoClient(MONGODB_URI)
+db = client.get_database()
+collection = db['your_collection_name']
 
-response = requests.get(AWS_API_GATEWAY_URL, headers=headers, params=params)
+cursor = collection.find({"course_id": course_id})
+data = list(cursor)
 
-if response.status_code == 200:
-    data = response.json()
-    df = pd.json_normalize(data)
-    df.set_index("_id", inplace=True) 
-    df.to_csv("results.csv")
-    print("Data successfully retrieved and saved to results.csv")
-else:
-    print(f"Error: {response.status_code}, {response.text}")
+df = pd.json_normalize(data)
+if '_id' in df.columns:
+    df.set_index("_id", inplace=True)
+df.to_csv("results.csv")
+print("Data successfully retrieved and saved to results.csv")
+
+client.close()
 '''

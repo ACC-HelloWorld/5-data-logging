@@ -22,5 +22,6 @@ jobs:
           echo "export COURSE_ID=\"${{ secrets.COURSE_ID }}\"" >> setenv.sh
           echo "export AWS_API_GATEWAY_URL=\"${{ secrets.AWS_API_GATEWAY_URL }}\"" >> setenv.sh
           echo "export AWS_API_KEY=\"${{ secrets.AWS_API_KEY }}\"" >> setenv.sh
+          echo "export MONGODB_URI=\"${{ secrets.MONGODB_URI }}\"" >> setenv.sh
           chmod +x setenv.sh
       - uses: education/autograding@v1

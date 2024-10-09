@@ -1,5 +1,5 @@
 -e . # package from this repo
 pandas
-pymongo
 requests
 pytest
+pymongo  

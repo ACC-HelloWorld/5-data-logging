@@ -33,6 +33,8 @@ https://github.com/ACC-HelloWorld/5-data-logging-<username>/settings/secrets/cod
 ```
 where `<username>` is replaced with your GitHub username.
 
+**Note:** If you encounter issues adding secrets to Codespaces, please refer to the "Alternative Methods for Handling Secrets" section at the end of this document.
+
 ## Insert
 
 Update [`insert.py`](./insert.py) based on [the tutorial example](https://ac-microcourses.readthedocs.io/en/latest/courses/hello-world/1.5-data-logging.html) to iteratively run 10 dummy color experiments and insert the data into your database via the AWS API Gateway.
@@ -119,3 +121,32 @@ You can also use the "Testing" sidebar extension to easily run individual tests.
 ## Additional Resources
 - [AWS API Gateway Documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html)
 - [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
+
+## Alternative Methods for Handling Secrets
+
+If you encounter difficulties adding secrets to GitHub Codespaces, consider the following alternatives:
+
+1. Repository-Level Secrets (Recommended):
+   a. Go to your GitHub repository page
+   b. Click on "Settings" tab
+   c. In the left sidebar, select "Secrets and variables" > "Actions"
+   d. Click "New repository secret"
+   e. Add each required secret (COURSE_ID, AWS_API_GATEWAY_URL, AWS_API_KEY)
+
+   Once added at the repository level, Codespaces should automatically access these secrets as environment variables.
+
+2. Local Development Alternative:
+   If you're still having issues with Codespaces, you can develop locally:
+   a. Clone the repository to your local machine
+   b. Create a `.env` file in the project root with the following content:
+      ```
+      COURSE_ID=your_course_id
+      AWS_API_GATEWAY_URL=your_aws_api_gateway_url
+      AWS_API_KEY=your_aws_api_key
+      ```
+   c. Use the `python-dotenv` library to load these environment variables in your scripts
+
+   Note: The `.env` file is not present in the current file structure. You will need to create this file if you choose to develop locally.
+
+Remember, for the microcontroller, you'll need to manually create the `my_secrets.py` file with the necessary information. Do not commit this file to the Git repository.
+

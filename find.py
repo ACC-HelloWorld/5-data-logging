@@ -8,38 +8,57 @@ from my_secrets import MONGODB_URI
 
 course_id = os.environ["COURSE_ID"]
 
-# Note: We no longer need cluster_name, database_name, collection_name, and connection_string
-# as we're using AWS API Gateway instead of direct MongoDB connection
-
-# TODO: Extract all entries from the database using AWS API Gateway
-# Hint: Use the requests library to make a GET request to the AWS API Gateway URL
-# Don't forget to include the API key in the headers
+# TODO: Create MongoDB client and connect to database
+# Hint: Use MongoClient(MONGODB_URI) and verify connection with ping
 ...
 
-# TODO: Create a flattened pandas DataFrame
-# Hint: Use pd.json_normalize() to flatten the JSON data
+# TODO: Get database and collection
+# Hint: Use client['database_name'] and db['collection_name']
 ...
 
-# TODO: Export the dataframe to results.csv file
-# Hint: Use the to_csv() method of the DataFrame
+# TODO: Query all documents with your course_id
+# Hint: Use collection.find({"course_id": course_id})
 ...
 
-# Note: We no longer need to close the client as we're not directly connecting to MongoDB
+# TODO: Create pandas DataFrame from results
+# Hint: Use pd.DataFrame(results)
+...
 
-# Example structure (you need to fill in the details):
+# TODO: Set '_id' as index and save to CSV
+# Hint: Use df.set_index("_id") and df.to_csv()
+...
+
+# Don't forget to close the MongoDB connection!
+
+# Example structure:
 '''
+# Connect to MongoDB
 client = MongoClient(MONGODB_URI)
-db = client.get_database()
-collection = db['your_collection_name']
 
-cursor = collection.find({"course_id": course_id})
-data = list(cursor)
+# Verify connection
+try:
+    client.admin.command('ping')
+    print("Successfully connected to MongoDB!")
+except Exception as e:
+    print(f"Connection failed: {e}")
+    exit(1)
 
-df = pd.json_normalize(data)
+# Get database and collection
+db = client['your_database']
+collection = db['your_collection']
+
+# Query documents
+results = list(collection.find({"course_id": course_id}))
+
+# Create DataFrame
+df = pd.DataFrame(results)
 if '_id' in df.columns:
-    df.set_index("_id", inplace=True)
-df.to_csv("results.csv")
-print("Data successfully retrieved and saved to results.csv")
+    df.set_index('_id', inplace=True)
 
+# Save to CSV
+df.to_csv("results.csv")
+print("Data saved to results.csv")
+
+# Close connection
 client.close()
 '''

@@ -1,152 +1,73 @@
 # Logging Data
-Write entries to a database using a microcontroller and read them back using a Python script, all through AWS API Gateway.
+Write entries to a MongoDB database using a microcontroller and read them back using a Python script.
 
 ## The assignment
-The tests are failing right now because your AWS API Gateway credentials have not been added as GitHub repository secrets and because the two scripts ([`insert.py`](./insert.py) and [`find.py`](./find.py)) are not yet implemented. Wherever you see `...` within the script requires you to write your own code.
+The tests are failing right now because your MongoDB credentials have not been added as GitHub repository secrets and because the two scripts ([`insert.py`](./insert.py) and [`find.py`](./find.py)) are not yet implemented. Wherever you see `...` within the script requires you to write your own code.
 
-## AWS API Gateway Setup and GitHub Secrets
+## MongoDB Setup and GitHub Secrets
 
 For this assignment, you will need to add the [GitHub repository secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions) listed below both as GitHub Actions secrets and Codespaces secrets, so that both you and the autograding scripts can access them. Please also keep a backup copy of these secrets in a secure location.
 
 **The secrets to be added to GitHub Actions and Codespaces are:**
-| Variable Name       | Description |
-|---------------------|-------------|
-| `COURSE_ID`         | Your student identifier for the course |
-| `AWS_API_GATEWAY_URL` | The URL of your AWS API Gateway endpoint |
-| `AWS_API_KEY`       | The API key for accessing your AWS API Gateway |
-
-While tedious, this approach is a one-time setup that simplifies the development and autograding process while adhering to security best practices. Your `COURSE_ID` can be accessed from the main course website by referencing the corresponding quiz response from the main course website.
-
-### AWS API Gateway Setup
-
-You will need to set up an AWS API Gateway that connects to a Lambda function, which in turn interacts with a MongoDB database. The specific steps for this setup will be provided by your instructor or in a separate guide.
-
-### Adding Secrets
-
-The interfaces for adding secrets can be found via your GitHub repository's `Settings` tab under the `Security` section on the left sidebar. Click the corresponding dropdown item in the `Secrets and variables` dropdown menu. Alternatively, use the direct links to navigate to these pages, which will be of the form:
-```html
-https://github.com/ACC-HelloWorld/5-data-logging-<username>/settings/secrets/actions
-```
-and
-```html
-https://github.com/ACC-HelloWorld/5-data-logging-<username>/settings/secrets/codespaces
-```
-where `<username>` is replaced with your GitHub username.
+| Variable Name | Description |
+|--------------|-------------|
+| `COURSE_ID`  | Your student identifier for the course |
+| `MONGODB_URI`| Your MongoDB connection string |
 
 **Note:** If you encounter issues adding secrets to Codespaces, please refer to the "Alternative Methods for Handling Secrets" section at the end of this document.
 
 ## Insert
 
-Update [`insert.py`](./insert.py) based on [the tutorial example](https://ac-microcourses.readthedocs.io/en/latest/courses/hello-world/1.5-data-logging.html) to iteratively run 10 dummy color experiments and insert the data into your database via the AWS API Gateway.
+Update [`insert.py`](./insert.py) to iteratively run color experiments and insert the data into your MongoDB database. You will need to:
 
-You are required to also log the original command (i.e., `R`, `G`, `B`) and `experiment_id` along with the sensor data. The dictionary should be of the form:
+1. Connect to MongoDB using the provided URI
+2. Run each experiment in `payload_dicts` using the `run_color_experiment()` function
+3. Insert the results into the database
 
+The document structure should be of the form:
 ```python
 {
-    "command": {"R": ..., "G": ..., "B": ...},
-    "sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
-    "experiment_id": "...",
-    "course_id": "..."
+"command": {"R": ..., "G": ..., "B": ...},
+"sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
+"experiment_id": "...",
+"course_id": "...",
+"timestamp": "..."
 }
 ```
 
-See the example below for how to combine the original payload dictionary with the new sensor data in MicroPython:
-
-```python
-payload_dict = {"command": {"R": 255, "G": 0, "B": 0}, "experiment_id": "abc123"}
-sensor_data = {
-    "ch410": 25,
-    "ch440": 51,
-    "ch470": 76,
-    "ch510": 102,
-    "ch550": 127,
-    "ch583": 153,
-    "ch620": 229,
-    "ch670": 255,
-}
-results = payload_dict.copy()
-results.update({"sensor_data": sensor_data, "course_id": COURSE_ID})
-# {'command': {'R': 255, 'G': 0, 'B': 0}, 'experiment_id': 'abc123', 'sensor_data': {'ch410': 25, 'ch440': 51, 'ch470': 76, 'ch510': 102, 'ch550': 127, 'ch583': 153, 'ch620': 229, 'ch670': 255}, 'course_id': 'your_course_id'}
-```
-Note that Python's ["unpack" operator](https://chat.openai.com/share/0dd75ad3-f428-4439-a77b-cb3ccd9e4786) (`**`) is not supported in MicroPython on the Pico W, hence the copy-and-update approach above.
-
-You will also need to fill out [`my_secrets.py`](my_secrets.py) (autogenerated by Codespaces) and upload it to your microcontroller. The file is created automatically when you create your codespace, but it is ignored by git (see [`.gitignore`](.gitignore)). You should not commit or push `my_secrets.py` to the GitHub repo.
-
-When you are done implementing the script and have updated [`my_secrets.py`] on the microcontroller, upload the script and run it on your microcontroller.
 
 ## Find
 
-Update [`find.py`](./find.py) to read all records from the database that have your course ID stored within the `course_id` field via the AWS API Gateway. Then, convert the results into a pandas DataFrame and save the output into a CSV file called `results.csv`.
+Update [`find.py`](./find.py) to read all records from the database that have your course ID stored within the `course_id` field. Then, convert the results into a pandas DataFrame and save the output into a CSV file called `results.csv`.
 
 Since your documents are nested dictionaries, you will need to use the `pd.json_normalize` function to flatten the nested dictionaries into a pandas DataFrame. For convenience, you can also set the `_id` column as the index of the pandas DataFrame via `.set_index("_id")`. See the example below:
 
 ```python
 import pandas as pd
-
 data = [
-    {
-        "_id": "id1",
-        "category1": {"item1": 1, "item2": 2, "item3": 3},
-        "category2": {"itemA": 10, "itemB": 20, "itemC": 30},
-    },
-    {
-        "_id": "id2",
-        "category1": {"item1": 4, "item2": 5, "item3": 6},
-        "category2": {"itemA": 40, "itemB": 50, "itemC": 60},
-    },
+{
+"id": "id1",
+"category1": {"item1": 1, "item2": 2, "item3": 3},
+"category2": {"itemA": 10, "itemB": 20, "itemC": 30},
+},
+{
+"id": "id2",
+"category1": {"item1": 4, "item2": 5, "item3": 6},
+"category2": {"itemA": 40, "itemB": 50, "itemC": 60},
+},
 ]
-
-df = pd.json_normalize(data).set_index("_id")
+df = pd.json_normalize(data).set_index("id")
 print(list(df.columns))
-# ['category1.item1', 'category1.item2', 'category1.item3', 'category2.itemA', 'category2.itemB', 'category2.itemC']
+['category1.item1', 'category1.item2', 'category1.item3', 'category2.itemA', 'category2.itemB', 'category2.itemC']
 print(df)
-#      category1.item1  category1.item2  category1.item3  category2.itemA  category2.itemB  category2.itemC
-# _id                                                                                                      
-# id1                1                2                3               10               20               30
-# id2                4                5                6               40               50               60
 ```
 
-NOTE: Committing and pushing `results.csv` is optional and will
-not affect the autograding results.
+## Testing
 
-## Setup command
+The autograding workflow will run several tests to verify your implementation:
+1. MongoDB credentials test
+2. MongoDB connection test
+3. Data insertion test
+4. Data retrieval test
 
-See `postCreateCommand` from [`devcontainer.json`](.devcontainer/devcontainer.json).
-
-## Run command
-`pytest`
-
-You can also use the "Testing" sidebar extension to easily run individual tests.
-
-## Additional Resources
-- [AWS API Gateway Documentation](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html)
-- [AWS Lambda Documentation](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
-
-## Alternative Methods for Handling Secrets
-
-If you encounter difficulties adding secrets to GitHub Codespaces, consider the following alternatives:
-
-1. Repository-Level Secrets (Recommended):
-   a. Go to your GitHub repository page
-   b. Click on "Settings" tab
-   c. In the left sidebar, select "Secrets and variables" > "Actions"
-   d. Click "New repository secret"
-   e. Add each required secret (COURSE_ID, AWS_API_GATEWAY_URL, AWS_API_KEY)
-
-   Once added at the repository level, Codespaces should automatically access these secrets as environment variables.
-
-2. Local Development Alternative:
-   If you're still having issues with Codespaces, you can develop locally:
-   a. Clone the repository to your local machine
-   b. Create a `.env` file in the project root with the following content:
-      ```
-      COURSE_ID=your_course_id
-      AWS_API_GATEWAY_URL=your_aws_api_gateway_url
-      AWS_API_KEY=your_aws_api_key
-      ```
-   c. Use the `python-dotenv` library to load these environment variables in your scripts
-
-   Note: The `.env` file is not present in the current file structure. You will need to create this file if you choose to develop locally.
-
-Remember, for the microcontroller, you'll need to manually create the `my_secrets.py` file with the necessary information. Do not commit this file to the Git repository.
-
+Make sure all tests pass before submitting your assignment.

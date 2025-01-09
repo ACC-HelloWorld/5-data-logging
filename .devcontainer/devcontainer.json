@@ -19,6 +19,6 @@
 			]
 		}
 	},
-	"onCreateCommand": "sudo cp .devcontainer/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt && echo 'MONGODB_URI = \"<your_mongodb_uri_here>\"\nCOURSE_ID = \"<your_course_id_here>\"' > my_secrets.py",
+	"onCreateCommand": "sudo cp .devcontainer/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt && echo 'MONGODB_URI = \"<your_mongodb_uri_here>\"\nCOURSE_ID = \"<your_course_id_here>\"\nSSID = \"<your_wifi_ssid>\"\nPASSWORD = \"<your_wifi_password>\"' > my_secrets.py",
 	"postCreateCommand": "sudo -H pip3 install -r requirements.txt"
 }

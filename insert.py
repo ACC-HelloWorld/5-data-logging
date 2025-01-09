@@ -1,10 +1,16 @@
 # This file needs to be run on your microcontroller
-from pymongo import MongoClient
-from datetime import datetime
-from my_secrets import MONGODB_URI, COURSE_ID
+from netman import connectWiFi
+import urequests
+import ujson
+from my_secrets import (
+    SSID,
+    PASSWORD,
+    MONGODB_URI,
+    COURSE_ID
+)
 
-# TODO: Other imports here (if needed)
-...
+# Connect to WiFi
+connectWiFi(SSID, PASSWORD, country="US")
 
 def run_color_experiment(R, G, B):
     """Simulate color sensor readings"""
@@ -26,15 +32,11 @@ payload_dicts = [
 ]
 
 # TODO: Create MongoDB client and verify connection
-# Hint: Use MongoClient(MONGODB_URI) and client.admin.command('ping')
-...
-
-# TODO: Get database and collection
-# Hint: Use client['database_name'] and db['collection_name']
+# Hint: Use urequests to connect to MongoDB
 ...
 
 # TODO: For each experiment in payload_dicts:
 # 1. Run the experiment using run_color_experiment()
 # 2. Create a document with command, sensor_data, experiment_id, and course_id
-# 3. Insert document using collection.insert_one()
+# 3. Send document to MongoDB using urequests.post()
 ...

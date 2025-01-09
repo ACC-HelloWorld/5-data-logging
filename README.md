@@ -1,8 +1,10 @@
 # Logging Data
-Write entries to a MongoDB database using a microcontroller and read them back using a Python script.
+Write entries to a MongoDB database using a microcontroller and read them back using a Python script on your computer.
 
 ## The assignment
-The tests are failing right now because your MongoDB credentials have not been added as GitHub repository secrets and because the two scripts ([`insert.py`](./insert.py) and [`find.py`](./find.py)) are not yet implemented. Wherever you see `...` within the script requires you to write your own code.
+This assignment consists of two parts:
+1. Using a microcontroller to run experiments and upload data (`insert.py`)
+2. Using your computer to retrieve and analyze the data (`find.py`)
 
 ## MongoDB Setup and GitHub Secrets
 

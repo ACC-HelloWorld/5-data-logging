@@ -29,36 +29,3 @@ course_id = os.environ["COURSE_ID"]
 ...
 
 # Don't forget to close the MongoDB connection!
-
-# Example structure:
-'''
-# Connect to MongoDB
-client = MongoClient(MONGODB_URI)
-
-# Verify connection
-try:
-    client.admin.command('ping')
-    print("Successfully connected to MongoDB!")
-except Exception as e:
-    print(f"Connection failed: {e}")
-    exit(1)
-
-# Get database and collection
-db = client['your_database']
-collection = db['your_collection']
-
-# Query documents
-results = list(collection.find({"course_id": course_id}))
-
-# Create DataFrame
-df = pd.DataFrame(results)
-if '_id' in df.columns:
-    df.set_index('_id', inplace=True)
-
-# Save to CSV
-df.to_csv("results.csv")
-print("Data saved to results.csv")
-
-# Close connection
-client.close()
-'''

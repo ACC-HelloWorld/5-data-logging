@@ -14,7 +14,7 @@ def test_insert_implementation():
     # Count documents before insertion
     initial_count = collection.count_documents({"course_id": course_id})
     
-    # Run insert.py
+    # Run insert.py (this would normally run on microcontroller)
     import insert
     
     # Count documents after insertion

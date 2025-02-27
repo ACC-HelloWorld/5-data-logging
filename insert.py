@@ -1,7 +1,14 @@
 # This file needs to be run on your microcontroller
 from netman import connectWiFi
 
-from my_secrets import SSID, PASSWORD, COURSE_ID, LAMBDA_FUNCTION_URL
+from my_secrets import (
+    SSID,
+    PASSWORD,
+    DATABASE_NAME,
+    COLLECTION_NAME,
+    COURSE_ID,
+    LAMBDA_FUNCTION_URL,
+)
 
 # Connect to WiFi
 connectWiFi(SSID, PASSWORD, country="US")

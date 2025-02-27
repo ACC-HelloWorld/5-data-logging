@@ -27,23 +27,27 @@ First, [set up your MongoDB account](https://account.mongodb.com/account/registe
 
 <sub>*`CLUSTER_NAME` should be 23 characters or fewer and should not end with a hyphen `-` (based on [Atlas docs](https://www.mongodb.com/docs/manual/reference/limits/#mongodb-atlas-label-limits))</sub>
 
+### Database and Collection
+
+Follow the `Creating a MongoDB Database with the Atlas UI` instructions within the [Create a Database guide](https://www.mongodb.com/basics/create-database). Take note of the database name (`DATABASE_NAME`) and collection name (`COLLECTION_NAME`) that you choose: for example, `test-db` and `test-collection`, respectively.
+
 ### Database User
 
-Next, [create a database user](https://www.mongodb.com/docs/guides/atlas/db-user/) with read and write permissions and store this information in a secure location.
+Next, [create a database user](https://www.mongodb.com/docs/guides/atlas/db-user/). Assign a specific privilege with the `readWrite` for the database you created (e.g., `test-db`) and **Restrict Access to Specific Clusters** for your current cluster (e.g., `test-cluster`), as shown below. Store the username and password in a secure location. Remember to click the green **Add User** button at the bottom-right.
+
+![Privileges](./readme-images/privileges.png)
+
+You will do this in place of assigning a built-in role, which typically would allow you access to any database in any cluster. NOTE: There are many ways you can customize access including [built-in roles and privileges](https://www.mongodb.com/docs/atlas/mongodb-users-roles-and-privileges/) and [custom database roles](https://www.mongodb.com/docs/atlas/security-add-mongodb-roles/).
 
 ### Network Configuration
 
 Add `0.0.0.0/0` to [the network configuration](https://www.mongodb.com/docs/guides/atlas/network-connections/) to allow access from anywhere.
 
-### Database and Collection
-
-Follow the `Creating a MongoDB Database with the Atlas UI` instructions within the [Create a Database guide](https://www.mongodb.com/basics/create-database). Take note of the database name (`DATABASE_NAME`) and collection name (`COLLECTION_NAME`) that you choose: for example, `test-db` and `test-collection`, respectively.
-
 <!-- ![Creating the database and collection](create-db-collection.gif) -->
 
 ### Atlas URI
 
-You will also need to copy the [MongoDB Atlas URI](https://www.mongodb.com/docs/guides/atlas/connection-string/) for your cluster. Refer to the video below. IMPORTANT: After copying the Atlas URI (connection string), you will need to manually populate `<password>` with your database user password before adding this as a GitHub secret. For example, if the copy-pasted Atlas URI is `mongodb+srv://sgbaird:<password>@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority` and your MongoDB password is `HGzZNsQ3vBLKrXXF`, then your `ATLAS_URI` would be `mongodb+srv://sgbaird:HGzZNsQ3vBLKrXXF@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority`.
+You will also need to copy the [MongoDB Atlas URI](https://www.mongodb.com/docs/guides/atlas/connection-string/) for your cluster. Refer to the video below. IMPORTANT: After copying the Atlas URI (connection string), you will need to manually populate `<db_username>` and `<db_password>` with your database user credentials before adding this as a GitHub secret. For example, if the copy-pasted Atlas URI is `mongodb+srv://<db_username>:<db_password>@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority` and your MongoDB username and password are `sgbaird` and `HGzZNsQ3vBLKrXXF`, respectively, then your `ATLAS_URI` would be `mongodb+srv://sgbaird:HGzZNsQ3vBLKrXXF@test-cluster.ab123.mongodb.net/?retryWrites=true&w=majority`.
 
 ![Finding MongoDB Atlas URI Cluster ID](./readme-images/mongodb-connect-uri.gif)
 

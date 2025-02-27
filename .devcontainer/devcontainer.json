@@ -19,6 +19,14 @@
 			]
 		}
 	},
-	"onCreateCommand": "sudo cp .devcontainer/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt && echo 'MONGODB_URI = \"<your_mongodb_uri_here>\"\nCOURSE_ID = \"<your_course_id_here>\"\nSSID = \"<your_wifi_ssid>\"\nPASSWORD = \"<your_wifi_password>\"' > my_secrets.py",
-	"postCreateCommand": "sudo -H pip3 install -r requirements.txt"
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	"onCreateCommand": "sudo cp .devcontainer/welcome.txt /usr/local/etc/vscode-dev-containers/first-run-notice.txt && echo 'SSID = \"<your_ssid_here>\"\nPASSWORD = \"<your_wifi_password_here>\"\nCOURSE_ID = \"<your_course_id_here>\"\nLAMBDA_FUNCTION_URL = \"<your_lambda_function_url_here>\"\nDATABASE_NAME = \"<your_database_name_here>\"\nCOLLECTION_NAME = \"<your_collection_name_here>\"' > my_secrets.py",
+	"postCreateCommand": "sudo -H pip3 install -r requirements.txt" // alternatively, `pip3 install --user -r requirements.txt`
+	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+	// "remoteUser": "vscode",
+	// "features": {
+	// 	"azure-cli": "latest"
+	// }
 }

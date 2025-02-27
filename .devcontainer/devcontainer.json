@@ -17,6 +17,10 @@
 				"GitHub.copilot",
 				"GitHub.copilot-chat"
 			]
+		},
+		"settings": {
+			"extensions.autoCheckUpdates": false,
+			"extensions.autoUpdate": false
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

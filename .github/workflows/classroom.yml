@@ -14,26 +14,45 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      # This is where you place your autograding tests
-      # For more information on this runner, see the documentation at: https://github.com/classroom-resources/autograding-io-grader
-      #
-      # For example, you could run a test suite like this:
-      # - name: Run tests
-      #   uses: classroom-resources/autograding-io-grader@v1
-      #     with:
-      #       test-name: Addition Test
-      #       id: addition-test
-      #       command: "./bin/add.sh"
-      #       input: 1 2
-      #       expected-output: 3
-      #       comparison-method: exact
-      #       timeout: 10
+      
+    - name: Create file for setting env vars
+      # https://github.com/education/autograding/issues/69#issuecomment-1497674655
+      # https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#using-secrets-in-a-workflow
+      run: |
+        echo "#!/bin/sh" > setenv.sh
+        echo "export COURSE_ID=\"${{ secrets.COURSE_ID }}\"" >> setenv.sh
+        echo "export DATABASE_NAME=\"${{ secrets.DATABASE_NAME }}\"" >> setenv.sh
+        echo "export COLLECTION_NAME=\"${{ secrets.COLLECTION_NAME }}\"" >> setenv.sh
+        echo "export LAMBDA_FUNCTION_URL=\"${{ secrets.LAMBDA_FUNCTION_URL }}\"" >> setenv.sh
+        echo "export ATLAS_URI=\"${{ secrets.ATLAS_URI }}\"" >> setenv.sh
+        chmod +x setenv.sh
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt  # Ensure your repo includes this file
+
+    - name: Run Pytest
+      id: pytest
+      uses: classroom-resources/autograding-command-grader@v1 # https://github.com/classroom-resources/autograding-command-grader
+      with:
+        test-name: "Python Test Suite"
+        setup-command: "pip install -r requirements.txt"
+        command: ". ./setenv.sh && pytest --tb=short"
+        timeout: 10
+        max-score: 10
+
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       # For more information on this runner, see the documentation at https://github.com/classroom-resources/autograding-grading-reporter
       # To output the results of the tests, you can use the
       # autograding-grading-reporter action like this:
-      # env:
-      # ADDITION-TEST_RESULTS: "${{ steps.addition - test.outputs.result }}"
-      #     with:
-      #         runners: addition-test
+      env:
+        PYTEST_RESULTS: "${{ steps.pytest.outputs.result }}"
+      with:
+          runners: "pytest"

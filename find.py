@@ -14,6 +14,7 @@ atlas_uri = os.environ["ATLAS_URI"]
 ...
 
 # TODO: Create a pandas DataFrame per instructions in README
+# and set the `_id` column as the DataFrame index
 ...
 
 # TODO: Export to results.csv file

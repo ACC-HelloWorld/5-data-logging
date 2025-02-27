@@ -7,10 +7,11 @@ from mongodb_credentials_test import (
     course_id_key,
     database_key,
     collection_key,
-    connection_string_key,
+    atlas_uri_key,
 )
 
-payload_dicts = [
+# fmt: off
+documents = [
     {"command": {"R": 11, "G": 218, "B": 81}, "experiment_id": "dacc788d"},  # Malachite
     {"command": {"R": 127, "G": 255, "B": 212}, "experiment_id": "ca236d4e"},  # Aquamarine
     {"command": {"R": 80, "G": 200, "B": 120}, "experiment_id": "bad820bb"},  # Emerald
@@ -21,7 +22,8 @@ payload_dicts = [
     {"command": {"R": 38, "G": 97, "B": 156}, "experiment_id": "e0ad387b"},  # Lapis Lazuli
     {"command": {"R": 0, "G": 0, "B": 255}, "experiment_id": "69dca791"},  # Topaz
     {"command": {"R": 225, "G": 44, "B": 44}, "experiment_id": "39d832df"},  # Rhodolite
-] # Hard-coded to match insert.py
+]  # Hard-coded to match insert.py
+# fmt: on
 
 
 def flatten_dict(d, parent_key="", sep="_"):
@@ -54,11 +56,11 @@ def run_color_experiment(R, G, B):
 
 results_check = [
     {
-        "command": payload["command"],
-        "sensor_data": run_color_experiment(**payload["command"]),
-        "experiment_id": payload["experiment_id"],
+        "command": document["command"],
+        "sensor_data": run_color_experiment(**document["command"]),
+        "experiment_id": document["experiment_id"],
     }
-    for payload in payload_dicts
+    for document in documents
 ]
 
 flat_results_check = [flatten_dict(doc) for doc in results_check]
@@ -70,8 +72,8 @@ def test_documents_inserted():
         doc["course_id"] = os.environ[course_id_key]
 
     # Create a new client and connect to the server
-    connection_string = os.environ[connection_string_key]
-    client = MongoClient(connection_string)
+    atlas_uri = os.environ[atlas_uri_key]
+    client = MongoClient(atlas_uri)
 
     # upload a test document
     db = client[os.environ[database_key]]
@@ -90,10 +92,12 @@ def test_documents_inserted():
     for rc in flat_results_check:
         if not any(
             all(
-                math.isclose(float(v), float(doc.get(k, None)), rel_tol=1e-4)
-                if isinstance(v, (float, int))
-                and isinstance(doc.get(k, None), (float, int))
-                else doc.get(k, None) == v
+                (
+                    math.isclose(float(v), float(doc.get(k, None)), rel_tol=1e-4)
+                    if isinstance(v, (float, int))
+                    and isinstance(doc.get(k, None), (float, int))
+                    else doc.get(k, None) == v
+                )
                 for k, v in rc.items()
             )
             for doc in flat_docs

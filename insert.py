@@ -1,16 +1,7 @@
 # This file needs to be run on your microcontroller
 from netman import connectWiFi
 
-from my_secrets import (
-    SSID,
-    PASSWORD,
-    COURSE_ID,
-    DATA_API_KEY,
-    ENDPOINT_BASE_URL,
-    CLUSTER_NAME,
-    DATABASE_NAME,
-    COLLECTION_NAME,
-)
+from my_secrets import SSID, PASSWORD, COURSE_ID, LAMBDA_FUNCTION_URL
 
 # TODO: other imports here
 ...
@@ -61,13 +52,22 @@ def run_color_experiment(R, G, B):
 # `secrets.py` to avoid confusion.
 payload_dicts = [
     {"command": {"R": 11, "G": 218, "B": 81}, "experiment_id": "dacc788d"},  # Malachite
-    {"command": {"R": 127, "G": 255, "B": 212}, "experiment_id": "ca236d4e"},  # Aquamarine
+    {
+        "command": {"R": 127, "G": 255, "B": 212},
+        "experiment_id": "ca236d4e",
+    },  # Aquamarine
     {"command": {"R": 80, "G": 200, "B": 120}, "experiment_id": "bad820bb"},  # Emerald
-    {"command": {"R": 115, "G": 106, "B": 255}, "experiment_id": "c15bae67"},  # Tanzanite
+    {
+        "command": {"R": 115, "G": 106, "B": 255},
+        "experiment_id": "c15bae67",
+    },  # Tanzanite
     {"command": {"R": 171, "G": 173, "B": 72}, "experiment_id": "673e6846"},  # Peridot
     {"command": {"R": 0, "G": 163, "B": 108}, "experiment_id": "32d35040"},  # Jade
     {"command": {"R": 21, "G": 176, "B": 26}, "experiment_id": "f998b465"},  # Tsavorite
-    {"command": {"R": 38, "G": 97, "B": 156}, "experiment_id": "e0ad387b"},  # Lapis Lazuli
+    {
+        "command": {"R": 38, "G": 97, "B": 156},
+        "experiment_id": "e0ad387b",
+    },  # Lapis Lazuli
     {"command": {"R": 0, "G": 0, "B": 255}, "experiment_id": "69dca791"},  # Topaz
     {"command": {"R": 225, "G": 44, "B": 44}, "experiment_id": "39d832df"},  # Rhodolite
 ]

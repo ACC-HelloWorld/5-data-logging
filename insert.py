@@ -3,36 +3,13 @@ from netman import connectWiFi
 
 from my_secrets import SSID, PASSWORD, COURSE_ID, LAMBDA_FUNCTION_URL
 
-# TODO: other imports here
-...
-
+# Connect to WiFi
 connectWiFi(SSID, PASSWORD, country="US")
 
 
 # Dummy function for running a color experiment
 def run_color_experiment(R, G, B):
-    """
-    Run a color experiment with the specified RGB values.
-
-    Parameters
-    ----------
-    R : int
-        The red component of the color, between 0 and 255.
-    G : int
-        The green component of the color, between 0 and 255.
-    B : int
-        The blue component of the color, between 0 and 255.
-
-    Returns
-    -------
-    dict
-        A dictionary with the sensor data from the experiment.
-
-    Examples
-    --------
-    >>> run_color_experiment(255, 0, 0)
-    {'ch410': 25.5, 'ch440': 51.0, 'ch470': 76.5, 'ch510': 102.0, 'ch550': 127.5, 'ch583': 153.0, 'ch620': 229.5, 'ch670': 255.0} # noqa: E501
-    """
+    """Simulate color sensor readings"""
     wavelengths = [410, 440, 470, 510, 550, 583, 620, 670]
     rw = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.9, 1.0]
     gw = [0.2, 0.4, 0.6, 0.8, 1.0, 0.8, 0.4, 0.2]
@@ -53,7 +30,10 @@ def run_color_experiment(R, G, B):
 # fmt: off
 documents = [
     {"command": {"R": 11, "G": 218, "B": 81}, "experiment_id": "dacc788d"},  # Malachite
-    {"command": {"R": 127, "G": 255, "B": 212}, "experiment_id": "ca236d4e"},  # Aquamarine
+    {
+        "command": {"R": 127, "G": 255, "B": 212},
+        "experiment_id": "ca236d4e",
+    },  # Aquamarine
     {"command": {"R": 80, "G": 200, "B": 120}, "experiment_id": "bad820bb"},  # Emerald
     {"command": {"R": 115, "G": 106, "B": 255}, "experiment_id": "c15bae67"},  # Tanzanite
     {"command": {"R": 171, "G": 173, "B": 72}, "experiment_id": "673e6846"},  # Peridot

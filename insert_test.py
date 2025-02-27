@@ -115,4 +115,4 @@ def test_documents_inserted():
 
 
 if __name__ == "__main__":
-    test_documents_inserted()
+    test_insert_implementation()

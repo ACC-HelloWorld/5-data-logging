@@ -1,6 +1,9 @@
 import os
+import pandas as pd
+from pymongo import MongoClient
+from my_secrets import MONGODB_URI
 
-# TODO: Other imports here
+# TODO: Other imports here (if needed)
 ...
 
 course_id = os.environ["COURSE_ID"]
@@ -16,7 +19,8 @@ atlas_uri = os.environ["ATLAS_URI"]
 # TODO: Create a pandas DataFrame per instructions in README
 ...
 
-# TODO: Export the dataframe to results.csv file
+# TODO: Set '_id' as index and save to CSV
+# Hint: Use df.set_index("_id") and df.to_csv()
 ...
 
 # TODO: Close the client

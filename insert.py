@@ -10,6 +10,9 @@ from my_secrets import (
     LAMBDA_FUNCTION_URL,
 )
 
+# TODO: other imports here
+...
+
 # Connect to WiFi
 connectWiFi(SSID, PASSWORD, country="US")
 

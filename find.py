@@ -1,8 +1,6 @@
 import os
-import pandas as pd
-from pymongo import MongoClient
 
-# TODO: Other imports here (if needed)
+# TODO: Other imports here
 ...
 
 course_id = os.environ["COURSE_ID"]

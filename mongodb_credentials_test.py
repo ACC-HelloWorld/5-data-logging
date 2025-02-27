@@ -38,7 +38,7 @@ def test_connection():
     assert success, f"""Could not connect to MongoDB using the following URI: {atlas_uri}. 
     The URI should be of the format mongodb+srv://<username>:<password>@<cluster_name>.<cluster_id>.mongodb.net/?retryWrites=true&w=majority 
     where your cluster name and cluster ID can be found using the 'Connect' button interface on MongoDB Atlas. 
-    For example, if your username is `test-user-find-only`, password is `HGzZNsQ3vBLKrXXF`, cluster name is `test-cluster`, and cluster ID is `c5jgpni`, 
+    For example, if your username is `sgbaird`, password is `HGzZNsQ3vBLKrXXF`, cluster name is `test-cluster`, and cluster ID is `c5jgpni`, 
     then your URI would be: mongodb+srv://sgbaird:HGzZNsQ3vBLKrXXF@test-cluster.c5jgpni.mongodb.net/?retryWrites=true&w=majority.
     Please check your environment variables and ensure your MongoDB database and collection are set up correctly."""
 

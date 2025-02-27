@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from pymongo import MongoClient
-from my_secrets import MONGODB_URI
 
 # TODO: Other imports here (if needed)
 ...

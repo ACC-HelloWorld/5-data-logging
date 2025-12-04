@@ -85,6 +85,9 @@ Add your Atlas URI as follows, ensuring that your database username and password
 
 ![AWS Lambda Function Environment Variables](./readme-images/atlas-uri-env-var.png)
 
+Navigate to **Code** tab, modify the code source to remove (or comment out) the rows for the definitions of `username` `password` and `atlas_uri`, then assign `ATLAS_URI` to `atlas_uri` using `atlas_uri = os.environ.get("ATLAS_URI")`:
+![Modify AWS code source](./readme-images/aws_code_source_modification.png)
+
 Note the **Function URL** from the top right of the page. This is your `LAMBDA_FUNCTION_URL`.
 
 ### Adding Secrets

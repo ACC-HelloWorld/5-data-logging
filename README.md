@@ -108,20 +108,34 @@ https://github.com/ACC-HelloWorld/5-data-logging-sgbaird/settings/secrets/codesp
 
 ## Insert
 
-Update [`insert.py`](./insert.py) to iteratively run color experiments and insert the data into your MongoDB database. You will need to:
+Update [`insert.py`](./insert.py) to iteratively run color experiments and upload the data to your MongoDB database via the AWS Lambda function. You will need to:
 
-1. Connect to MongoDB using the provided URI
-2. Run each experiment in `payload_dicts` using the `run_color_experiment()` function
-3. Insert the results into the database
+1. Import `urequests` and `json` (MicroPython equivalents of `requests` and `json`)
+2. Loop through each entry in the `documents` list
+3. Run each experiment using the `run_color_experiment()` function with the R, G, B values from the entry's `"command"` dictionary
+4. Build a **document** dictionary containing the command, sensor data, experiment ID, and your course ID
+5. Wrap the document in a **payload** dictionary that tells the Lambda function which database and collection to use (see the `test_lambda_function_url` function in [`mongodb_credentials_test.py`](./mongodb_credentials_test.py) for reference)
+6. POST the payload to the Lambda function URL
 
-The document structure should be of the form:
+> **Important: document vs. payload**
+> The *document* is the data you want to store in MongoDB (command, sensor data, experiment ID, course ID). The *payload* wraps the document with metadata (database name, collection name) so the Lambda function knows where to insert it.
+
+The **document** (what gets stored in MongoDB) should be of the form:
 ```python
 {
-"command": {"R": ..., "G": ..., "B": ...},
-"sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
-"experiment_id": "...",
-"course_id": "...",
-"timestamp": "..."
+    "command": {"R": ..., "G": ..., "B": ...},
+    "sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
+    "experiment_id": "...",
+    "course_id": "...",
+}
+```
+
+The **payload** (what gets sent to the Lambda function) should be of the form:
+```python
+{
+    "database": DATABASE_NAME,
+    "collection": COLLECTION_NAME,
+    "document": <your document from above>,
 }
 ```
 

@@ -10,7 +10,7 @@ from my_secrets import (
     LAMBDA_FUNCTION_URL,
 )
 
-# TODO: other imports here
+# TODO: import urequests and json here
 ...
 
 # Connect to WiFi
@@ -55,13 +55,27 @@ documents = [
 ]
 # fmt: on
 
-# TODO: for each of the commands above, run the corresponding dummy color
-# experiment and upload a document containing your course ID (use `course_id` as
-# the key), the original command, the experiment ID, and the sensor data to your
-# MongoDB collection. The dictionary should be of the form:
-# {
-#     "command": {"R": ..., "G": ..., "B": ...},
-#     "sensor_data": {"ch410": ..., "ch440": ..., ..., "ch670": ...},
-#     "experiment_id": "...",
-# }
+# TODO: for each document, do the following steps:
+# 1. Run the color experiment using `run_color_experiment()` with the R, G, B
+#    values from the document's "command" dictionary.
+# 2. Build a document dictionary containing the following keys:
+#    - "command": the original command (e.g., {"R": ..., "G": ..., "B": ...})
+#    - "sensor_data": the result from `run_color_experiment()`
+#    - "experiment_id": the experiment ID from the original document
+#    - "course_id": use the `COURSE_ID` variable from `my_secrets`
+# 3. Wrap the document in a payload dictionary for the Lambda function. The
+#    payload is NOT the same as the document—it includes metadata about where
+#    to store the document. See `test_lambda_function_url` in
+#    `mongodb_credentials_test.py` for reference. The payload should be:
+#    {
+#        "database": DATABASE_NAME,
+#        "collection": COLLECTION_NAME,
+#        "document": <your document from step 2>,
+#    }
+# 4. POST the payload to the Lambda function URL using `urequests.post()`:
+#    response = urequests.post(
+#        LAMBDA_FUNCTION_URL,
+#        headers={"Content-Type": "application/json"},
+#        data=json.dumps(payload),
+#    )
 ...
